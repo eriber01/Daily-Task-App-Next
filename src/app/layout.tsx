@@ -1,7 +1,9 @@
+"use client";
+import { Providers } from '@/redux/providers';
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Create Next App',
@@ -15,7 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className='bg-gray-500'>
+        <Providers>
+
+          {children}
+        </Providers>
+        <ToastContainer />
+      </body>
     </html>
   )
 }
