@@ -27,7 +27,7 @@ export const NavBar: FC = () => {
             {user.isLogin ?
               <button
                 className='text-white sm:text-base text-sm p-1 rounded bg-red-500'
-                onClick={() => LogoutFn({ actions: getUser, dispatch })}
+                onClick={() => LogoutFn({ actions: getUser, dispatch, actionsTask: [] })}
               >
                 Logout
               </button>
