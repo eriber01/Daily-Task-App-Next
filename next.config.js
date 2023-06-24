@@ -4,7 +4,8 @@ const nextConfig = {
     reactRoot: 'concurrent',
     reactConcurrentMode: true,
     reactRefresh: true,
-    root: 'src'
+    root: 'src',
+    appDir: 'true'
   }
 }
 
