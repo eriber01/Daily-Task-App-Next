@@ -2,8 +2,6 @@ import { task } from '../../../interfaces';
 import { addDoc, collection, deleteDoc, doc, getDocs, where, updateDoc, orderBy, query, getDoc } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 import { toast } from "react-toastify";
-
-
 export interface reducerAction {
   dispatch: any
   actions: any
@@ -28,6 +26,8 @@ const updateTask = async (task: task) => {
   await updateDoc(ref, {
     ...task,
   })
+
+  toast.success("Task Updated")
 }
 
 
@@ -45,6 +45,7 @@ const saveTask = async ({ name, description, module, priority }: task) => {
       uid: userData.uid,
       status: 2
     })
+    toast.success("Task Saved")
   } catch (error) {
     toast.error('Error saving the task')
   }
@@ -91,6 +92,7 @@ const deleteTasks = async ({ id, actions, dispatch }: updateDelete) => {
   getTasks({ actions, actionsTask: actions, dispatch })
 
   toast.success('Task deleted')
+
 }
 
 export const updateStatus = async ({ actions, dispatch, id, status }: updateDelete) => {
@@ -123,4 +125,71 @@ const getTasksUnique = async ({ id, actions, dispatch }: { id: string, actions: 
 
 }
 
-export { saveTask, getTasks, saveAndGetTask, deleteTasks, getTasksUnique }
+const getModules = async ({ getModule, dispatch }: { getModule: any, dispatch: any }) => {
+
+  let modules: any = []
+
+  const queries = query(collection(database, 'modules'))
+  const data = await getDocs(queries)
+  data.forEach((doc) => {
+
+    const obj = {
+      ...doc.data(),
+    }
+
+    modules.push(obj)
+  })
+
+  const modulesSort = modules.sort((a: any, b: any) => { return a.id - b.id })
+  console.log('modules: ', modulesSort);
+
+  dispatch(getModule({ modules: modulesSort }))
+
+}
+
+const seedModules = async () => {
+  const modules = [
+    {
+      id: 1,
+      name: 'Sales'
+    },
+    {
+      id: 2,
+      name: 'Profiles'
+    },
+    {
+      id: 3,
+      name: 'Center'
+    },
+    {
+      id: 4,
+      name: 'Shopping'
+    },
+    {
+      id: 5,
+      name: 'Study'
+    },
+    {
+      id: 6,
+      name: 'Personal Tasks'
+    },
+    {
+      id: 7,
+      name: 'Others'
+    }
+  ]
+
+  try {
+
+    modules.map(async item =>
+      await addDoc(collection(database, "modules"), {
+        ...item
+      })
+    )
+  } catch (error) {
+    console.log("error: ", error);
+
+  }
+}
+
+export { saveTask, getTasks, saveAndGetTask, deleteTasks, getTasksUnique, seedModules, getModules }

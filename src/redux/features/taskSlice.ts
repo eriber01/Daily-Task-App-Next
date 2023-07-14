@@ -16,13 +16,8 @@ export const taskSlice = createSlice({
   initialState: initialStateTask,
   reducers: {
     addTask: (state, actions) => {
-
       state.task = actions.payload
-
     },
-    deleteTask: (state, actions: PayloadAction) => {
-
-    }
   },
 })
 

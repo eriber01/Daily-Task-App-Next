@@ -7,6 +7,7 @@ import { getTasksUnique, updateStatus } from '@/services/database';
 import { addTask } from '@/redux/features/taskSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import { getTaskForEdit } from '@/redux/features/createUpdateTaskSlice';
+import { toggleModalTask } from '@/redux/features/uiSlice';
 
 interface Props {
   more: boolean,
@@ -25,9 +26,9 @@ const Tasks: FC<task> = (task: task) => {
   }, [task])
 
   return (
-    <div className='w-full text-center flex flex-col justify-center items-center md:w-8/12 md:m-auto xl:w-7/12'>
-      <div className='w-10/12 border bg-white rounded-md m-2 shadow flex items-center justify-center'>
-        <div className='w-1/12'>
+    <div className='w-full text-center flex flex-col justify-center items-center md:w-10/12 md:m-auto xl:w-7/12'>
+      <div className='w-10/12 border bg-white rounded-md m-2 shadow flex items-baseline justify-center py-2'>
+        <div className='mr-2'>
           <input
             type="checkbox" name="" id="" className='rounded'
             checked={state.checked}
@@ -49,16 +50,20 @@ const Tasks: FC<task> = (task: task) => {
                   {showPriority(task.priority)}
                 </span>
                 <button type='button'
+                style={{backgroundColor: '#5A96E3'}}
                   className='button-purple'
                   onClick={() => setState(pre => ({ ...pre, more: !state.more }))}
                 >
-                  details
+                  Details
                 </button>
                 <button type='button'
                   className='button-gray'
-                  onClick={() => getTasksUnique({ id: task?.id || '', dispatch, actions: getTaskForEdit })}
+                  onClick={() => {
+                    getTasksUnique({ id: task?.id || '', dispatch, actions: getTaskForEdit })
+                    dispatch(toggleModalTask({ isOpen: true }))
+                  }}
                 >
-                  edit
+                  Edit
                 </button>
               </div>
             </div>

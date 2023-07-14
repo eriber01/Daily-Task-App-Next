@@ -9,7 +9,7 @@ import { auth, githubProvider, googleProvider } from "../firebaseConfig";
 import { PropsUser } from "../../../interfaces";
 import { toast } from "react-toastify";
 import { loginErrorMessageHandler } from "@/utils";
-import { reducerAction, getTasks } from "../database";
+import { reducerAction, getTasks, getModules } from "../database";
 import { initialStateUser } from "@/redux/features/userSlice";
 import { initialStateTask } from "@/redux/features/taskSlice";
 
@@ -23,9 +23,10 @@ interface handlerPropsState {
   push: any
   getTask: any
   getUser: any
+  getModule: any
 }
 
-export const validateIsLogin = async ({ push, getTask, getUser }: handlerPropsState) => {
+export const validateIsLogin = async ({ push, getTask, getUser, getModule }: handlerPropsState) => {
   let validate = false
   let user = null
 
@@ -45,6 +46,7 @@ export const validateIsLogin = async ({ push, getTask, getUser }: handlerPropsSt
       push('/')
 
       await getTasks(getTask)
+      await getModules({ getModule, dispatch: getTask.dispatch })
 
       validate = true
       return { validate, user }

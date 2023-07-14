@@ -8,7 +8,6 @@ export const Providers = ({ children }: PropsWithChildren) => {
     <Provider store={store}>
       {children}
     </Provider>
-
   )
 }
 
