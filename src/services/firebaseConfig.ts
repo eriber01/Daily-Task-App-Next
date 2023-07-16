@@ -14,9 +14,6 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 }
 
-console.log('process.env: ', `"${process.env}"`);
-
-
 //user and pass
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)

@@ -92,6 +92,12 @@ const returnStatus = (id: number) => {
   }
 }
 
+const successAndLoadingMessage = (message: string) => {
+  setTimeout(() => {
+    toast.dismiss()
+    toast.success(message)
+  }, 1000);
+}
 
 export {
   handlerChangeState,
@@ -99,5 +105,6 @@ export {
   handlerTakState,
   validateFormTask,
   showPriority,
-  returnStatus
+  returnStatus,
+  successAndLoadingMessage
 }

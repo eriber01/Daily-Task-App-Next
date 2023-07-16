@@ -19,8 +19,6 @@ export const moduleSlice = createSlice({
   initialState: initialStateUser,
   reducers: {
     getModule: (state, actions: PayloadAction<{ modules: [] }>) => {
-      console.log(actions.payload.modules);
-
       state.module = actions.payload.modules 
     }
   }

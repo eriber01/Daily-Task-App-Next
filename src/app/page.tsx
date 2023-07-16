@@ -27,18 +27,23 @@ export default function Home() {
     <main>
       <Layout title='Daily Task App'>
         <CreateTask />
-        <div className='w-full text-center flex justify-around md:w-8/12 md:m-auto xl:w-7/12'>
-          <h3 className='text-white text-center bg-black px-6 py-1 rounded text-lg mb-5 mt-10'>Tasks</h3>
-          <button
-            className='text-white bg-blue-700 hover:bg-blue-900 rounded-md text-base px-4 py-1.5 mb-5 mt-10'
-            onClick={() => dispatch(toggleModalTask({ isOpen: true }))}
-          >Add Task</button>
+        <div className='m-auto w-full flex justify-center items-center md:w-11/12 xl:w-10/12'>
+          {/* <h3 className='text-white text-center bg-black px-6 py-1 rounded text-lg mb-5 mt-10'>Tasks</h3> */}
+          <div className='flex justify-end mb-5 mt-10 w-10/12'>
+            <button
+              className='text-white bg-blue-700 hover:bg-blue-900 rounded-md text-base px-6 py-1.5 transition-all duration-500'
+              onClick={() => dispatch(toggleModalTask({ isOpen: true }))}
+            >Add Task</button>
+          </div>
         </div>
-        {
-          task.map((item) => (
-            <Tasks {...item} key={item.id} />
-          ))
-        }
+
+        <div className='mb-5'>
+          {
+            task.map((item) => (
+              <Tasks {...item} key={item.id} />
+            ))
+          }
+        </div>
       </Layout>
     </main>
   )

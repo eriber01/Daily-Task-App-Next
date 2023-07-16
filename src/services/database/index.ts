@@ -1,7 +1,9 @@
 import { task } from '../../../interfaces';
-import { addDoc, collection, deleteDoc, doc, getDocs, where, updateDoc, orderBy, query, getDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, where, updateDoc, query, getDoc } from "firebase/firestore";
 import { database } from "../firebaseConfig";
 import { toast } from "react-toastify";
+import _ from "lodash";
+import { successAndLoadingMessage } from '@/utils';
 export interface reducerAction {
   dispatch: any
   actions: any
@@ -23,11 +25,20 @@ interface updateDelete {
 
 const updateTask = async (task: task) => {
   const ref = doc(database, 'task', task?.id || '')
-  await updateDoc(ref, {
-    ...task,
-  })
 
-  toast.success("Task Updated")
+  try {
+    toast.loading('Creating Task')
+
+    await updateDoc(ref, {
+      ...task,
+    })
+
+    successAndLoadingMessage("Task Updated")
+
+  } catch (error) {
+    toast.error('Error Updating Task')
+  }
+
 }
 
 
@@ -36,6 +47,7 @@ const saveTask = async ({ name, description, module, priority }: task) => {
   const userData = JSON.parse(sessionStorage.getItem('userData') || '')
 
   try {
+    toast.loading('Creating Task')
     await addDoc(collection(database, "task"), {
       name,
       description,
@@ -45,9 +57,11 @@ const saveTask = async ({ name, description, module, priority }: task) => {
       uid: userData.uid,
       status: 2
     })
-    toast.success("Task Saved")
+
+    successAndLoadingMessage("Task Created")
+
   } catch (error) {
-    toast.error('Error saving the task')
+    toast.error('Error Creating the task')
   }
 
 }
@@ -70,7 +84,7 @@ const getTasks = async ({ actions, dispatch }: reducerAction) => {
     task.push(obj)
   })
 
-  const tasks = task.sort((a: any, b: any) => { return a.status - b.status })
+  const tasks = _.orderBy(task, ['status', 'priority', 'name'], ['asc', 'asc', 'desc'])
 
   dispatch(actions(tasks))
 
@@ -87,22 +101,29 @@ const saveAndGetTask = async ({ task, getTask }: saveAndGetTask) => {
 }
 
 const deleteTasks = async ({ id, actions, dispatch }: updateDelete) => {
+
+  toast.loading('Deleted Task')
+
   await deleteDoc(doc(database, "task", id));
 
   getTasks({ actions, actionsTask: actions, dispatch })
 
-  toast.success('Task deleted')
+  successAndLoadingMessage("Task deleted")
 
 }
 
 export const updateStatus = async ({ actions, dispatch, id, status }: updateDelete) => {
   const ref = doc(database, 'task', id)
 
+  toast.loading('Updating Task')
+
   await updateDoc(ref, {
     status
   })
 
   await getTasks({ actions, actionsTask: actions, dispatch })
+
+  successAndLoadingMessage("Task Updated")
 
 }
 
@@ -141,7 +162,6 @@ const getModules = async ({ getModule, dispatch }: { getModule: any, dispatch: a
   })
 
   const modulesSort = modules.sort((a: any, b: any) => { return a.id - b.id })
-  console.log('modules: ', modulesSort);
 
   dispatch(getModule({ modules: modulesSort }))
 

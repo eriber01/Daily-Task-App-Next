@@ -26,7 +26,7 @@ const Tasks: FC<task> = (task: task) => {
   }, [task])
 
   return (
-    <div className='w-full text-center flex flex-col justify-center items-center md:w-10/12 md:m-auto xl:w-7/12'>
+    <div className='w-full text-center flex flex-col justify-center items-center md:w-11/12 md:m-auto xl:w-10/12'>
       <div className='w-10/12 border bg-white rounded-md m-2 shadow flex items-baseline justify-center py-2'>
         <div className='mr-2'>
           <input
